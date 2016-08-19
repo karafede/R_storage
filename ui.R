@@ -6,14 +6,14 @@ library(shinydashboard)
  ui <- dashboardPage(skin = "yellow",
         dashboardHeader(title = "Questionnaire"),
           dashboardSidebar(
-           width = 350,
+           width = 250,
           paste("Time:",Sys.time()),
           
           sidebarMenu(
            
        #   fluidRow(
           #  column (3,offset = 1,
-            textInput("name", "Name", "", width = 250),
+            textInput("name", "Name", "", width = 220),
         #  ),
           
          # fluidRow(
@@ -21,7 +21,7 @@ library(shinydashboard)
         #  ),
           
           fluidRow(
-            column (9, offset = 0,
+            column (11, offset = 0,
             sliderInput("r_num_years", "Number of years using R", 0, 25, 2, ticks = FALSE)
           )),
           

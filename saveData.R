@@ -1,35 +1,29 @@
 
-library(RPostgreSQL)
+library(mongolite)
 
-table <- "prova"
+options(mongodb = list(
+  "host" = "ds161245.mlab.com:61245",
+  "username" = "karafede",
+  "password" = "Password08"
+))
 
-####################################################
-
-# loads the PostgreSQL driver
-drv <- dbDriver("PostgreSQL")
-
-pw <- {
-  "Password07"
-}
+databaseName <- "karafededb"
+collectionName <- "responses"
 
 saveData <- function(data) {
-     # Connect to the database
-db <- dbConnect(drv, dbname = "stuarts_sandbox",
-                 host = "172.31.113.9", port = 5432,       
-                 user = "federicok", password = pw)
-# rm(pw) # removes the password
-dbListTables(db)
-
-# Construct the update query by looping over the data fields
-query <- sprintf(
-  "INSERT INTO %s (%s) VALUES ('%s')",
-  table, 
-  paste(names(data), collapse = ", "),
-  paste(data, collapse = "', '")
-)
-# Submit the update query and disconnect
-dbGetQuery(db, query)
-dbDisconnect(db)
+  # Connect to the database
+  db <- mongo(collection = collectionName,
+              url = sprintf(
+                "mongodb://%s:%s@%s/%s",
+                options()$mongodb$username,
+                options()$mongodb$password,
+                options()$mongodb$host,
+                databaseName))
+  # Insert the data into the mongo collection as a data.frame
+  data <- as.data.frame(t(data))
+  db$insert(data)
 }
 
-# dbWriteTable(db, name = "temp_tickers", value = data, row.names = FALSE)
+# con <- mongo(collection = "responses", db = "karafededb", url = "mongodb://karafede:Password08@ds161245.mlab.com:61245/karafededb")
+
+# con <- mongo("mtcars", url = "mongodb://readwrite:test@ds043942.mlab.com:43942/jeroen_test")
